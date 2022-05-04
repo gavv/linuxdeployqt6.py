@@ -294,7 +294,11 @@ def copy_directory(src, dst, ignore=None):
             log_fatal("cannot overwrite without -force: %s" % dst)
 
     os.makedirs(os.path.dirname(dst), exist_ok=True)
-    shutil.rmtree(dst, ignore_errors=True)
+    if os.path.isfile(dst):
+        os.unlink(dst)
+    elif os.path.isdir(dst):
+        shutil.rmtree(dst, ignore_errors=True)
+
     shutil.copytree(src, dst, ignore=ignore)
 
 def copy_file(src, dst):
@@ -308,6 +312,9 @@ def copy_file(src, dst):
     os.makedirs(os.path.dirname(dst), exist_ok=True)
     if os.path.isfile(dst):
         os.unlink(dst)
+    elif os.path.isdir(dst):
+        shutil.rmtree(dst, ignore_errors=True)
+
     shutil.copy2(src, dst)
 
 def write_file(dst, content):
@@ -317,6 +324,12 @@ def write_file(dst, content):
     if not op_mode.force:
         if os.path.exists(dst):
             log_fatal("cannot overwrite without -force: %s" % dst)
+
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    if os.path.isfile(dst):
+        os.unlink(dst)
+    elif os.path.isdir(dst):
+        shutil.rmtree(dst, ignore_errors=True)
 
     with open(dst, 'w') as fp:
         fp.write(content)
