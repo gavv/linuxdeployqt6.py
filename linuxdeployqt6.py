@@ -568,4 +568,4 @@ if not args.no_lib or not args.no_plugins or not ars.no_qml:
             dirs,
             lib.path)
 
-log_normal('Installation succeeded.')
+log_normal('Deployment succeeded.')
