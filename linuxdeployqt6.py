@@ -8,8 +8,11 @@ import json
 import os
 import re
 import shutil
+import signal
 import subprocess
 import sys
+
+signal.signal(signal.SIGINT,  signal.SIG_DFL)
 
 OperationMode = namedtuple(
     'OperationMode', 'force dry_run verbosity')
@@ -528,7 +531,7 @@ for executable in args.executable:
                 for lib in find_qt_plugin_libs(args.qtdir, qt_plugin):
                     all_libs.add(lib)
 
-for qmlscandir in args.qmlscandir:
+for qmlscandir in (args.qmlscandir or []):
     log_normal('Scanning qml imports of %s ...' % qmlscandir)
 
     for qml_module in find_qml_modules(args.qtdir, qmlscandir):
