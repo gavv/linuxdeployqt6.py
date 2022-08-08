@@ -101,22 +101,15 @@ def set_runpath(executable, rpath):
         else:
             rpath = os.path.join('$ORIGIN', rpath)
 
-    if shutil.which('chrpath'):
-        subprocess.run([
-            'chrpath',
-            '-r', rpath,
-            executable,
-            ],
-            check=True, stdout=subprocess.DEVNULL)
-    elif shutil.which('patchelf'):
-        subprocess.run([
-            'patchelf',
-            '--set-rpath', rpath,
-            executable,
-            ],
-            check=True, stdout=subprocess.DEVNULL)
-    else:
-        log_fatal("cannot find 'chrpath' or 'patchelf' tool in PATH")
+    if not shutil.which('patchelf'):
+        log_fatal("cannot find 'patchelf' tool in PATH")
+
+    subprocess.run([
+        'patchelf',
+        '--set-rpath', rpath,
+        executable,
+        ],
+        check=True, stdout=subprocess.DEVNULL)
 
 @memoize
 def is_qt_lib(qtdir, lib):
