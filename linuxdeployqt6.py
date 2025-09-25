@@ -372,8 +372,9 @@ def deploy_resources(dirs, qtdir):
     src_path = os.path.join(qtdir, 'resources')
     inst_path = os.path.join(dirs.data_dir, 'resources')
 
-    log_verbose('Deploying data directory %s' % inst_path)
-    copy_directory(src_path, inst_path)
+    if os.path.exists(src_path):
+        log_verbose('Deploying data directory %s' % inst_path)
+        copy_directory(src_path, inst_path)
 
 def deploy_qt_conf(dirs):
     inst_path = os.path.join(dirs.exe_dir, 'qt.conf')
